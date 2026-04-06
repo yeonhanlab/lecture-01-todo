@@ -4,7 +4,7 @@ function App() {
     // 사용자가 입력할 input의 값을 저장하기 위해서 만든 state
     // input 태그의 입력되는 값은 무조건 string이므로 useState("")로 표현
     const [todo, setTodo] = useState("");
-    const [list, setlist] = useState([]);
+    const [list, setList] = useState([]);
 
 
     const onChange = (event) => {
@@ -28,11 +28,22 @@ function App() {
         // list = [ ...list, "ㄱㄷㄴ"]   => 스프레드 문법(....) : 배열이나 객체의 내부 요소를 나열시키는 문법
         // list = [ ...["123"], "ㄱㄴㄷ"]
         // list = [ "123", "ㄱㄴㄷ" ];
-        setlist([...list, todo]);
+        setList([...list, todo]);
         // 2. todo의 값을 삭제하고(말은 삭제한다고하지만 덮어쓰는 것)
         setTodo("");
         // 3. input에 입력된 값도 삭제해야함  -> input이라고 하는 태그의 value 속성을 비워줘야 되는 일
     }
+
+    const deleteTodo = (index) => {
+        // 우리가 삭제해야 되는 것은 index로 접근할 수 있음. 훨씬 위에 있는 list에서
+        // 우리가 삭제하려는 list의 인덱스 번호 : index, filter를 통해 걸러내는 인덱스 번호 :
+        setList(
+            list.filter((v, i) => {
+                return i !== index;
+            }),
+        );
+    };
+
     return (
         <div>
             <h1>My ToDo ({list.length})</h1>
@@ -72,9 +83,16 @@ function App() {
                                             그 값은 이 map이 반환하는 태그들 사이에서 겹치지 않는 유일값을 넣어줘야 함
                 */}
                 {list.map((value,index)=> {
-                    return <li key={index}>{value}</li>;
+                    return (
+                        <li key={index}>
+                            {value}{" "}
+                            <button
+                                onClick={() => deleteTodo(index)}>
+                                ❌
+                            </button>
+                        </li>
+                    );
                 })}
-                <li>입력된내용</li>
             </ul>
         </div>
     );
